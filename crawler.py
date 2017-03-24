@@ -1,6 +1,8 @@
 from html.parser import HTMLParser
 from urllib.request import urlopen
 from urllib import parse
+from bs4 import BeautifulSoup
+
 
 
 class LinkParser(HTMLParser):
@@ -33,28 +35,32 @@ class LinkParser(HTMLParser):
             return "", []
 
 
-def spider(url, word, max_pages):
+def spider(url, words, max_pages):
     pages_to_visit = [url]
     number_visited = 0
-    found_word = False
-    while number_visited < max_pages and pages_to_visit != [] and not found_word:
+    visited_links = set()
+    while number_visited < max_pages and pages_to_visit != []:
         number_visited += 1
         url = pages_to_visit[0]
         pages_to_visit = pages_to_visit[1:]
+        visited_links.add(url)
         try:
             print(number_visited, "Visiting:", url)
             parser = LinkParser()
             data, links = parser.get_links(url)
-            if data.find(word) > -1:
-                found_word = True
-                pages_to_visit = pages_to_visit + links
-                print(" **Success!**")
+            soup = BeautifulSoup(data, 'html.parser')
+            if number_visited > 1 and any(len(x) > 0 for x in [soup(text=y) for y in words]):
+                for link in links:
+                    if '.pdf' in link:
+                        print(link)
+            else:
+                for link in links:
+                    if link not in visited_links:  # and url in link
+                        pages_to_visit.append(link)
+                        visited_links.add(link)
         except Exception as e:
             print(e)
             print(" **Failed!**")
-    if found_word:
-        print("The word", word, "was found at", url)
-    else:
-        print("Word never found")
 
-spider("https://www.ualberta.ca/computing-science/", "his", 100)
+words = ['CV', 'cv', 'Resume', 'RESUME', 'resume']
+spider("https://mattbrehmer.github.io/", words, 10000)
