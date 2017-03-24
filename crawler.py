@@ -38,7 +38,7 @@ class LinkParser(HTMLParser):
             return "", []
 
 
-def spider(url, words, out_dir, max_levels=4):
+def spider(url, words, out_dir, max_levels=8):
     pages_to_visit = [(url, 0)]
     number_visited = 0
     visited_links = set()
@@ -68,8 +68,10 @@ def spider(url, words, out_dir, max_levels=4):
                             break
 
             if not found_cv and level < max_levels:
+                main_uri = parse.urlparse(url)
+                main_domain = '{uri.netloc}'.format(uri=main_uri)
                 for link in links:
-                    if link not in visited_links:  # and url in link
+                    if link not in visited_links and main_domain == '{uri.netloc}'.format(uri=parse.urlparse(link)):
                         pages_to_visit.append((link, level + 1))
                         visited_links.add(link)
         except Exception as e:
