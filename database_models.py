@@ -15,7 +15,7 @@ class Student(BaseModel):
 
 
 class Skill(BaseModel):
-    skill_id = IntegerField()
+    skill_id = IntegerField(null=True)
     name = CharField(null=False)
 
 

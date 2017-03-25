@@ -59,4 +59,4 @@ def run(resumes_dir):
         remove(temp_output_name)
 
 if __name__ == '__main__':
-    run('CVs')
+    run('resumes')
