@@ -32,17 +32,12 @@ def extractDates(file, skillList):
         else:
             endDate = datetime.today()
         delta = endDate - startDate
-        #print(delta.total_seconds()/86400/30)
         if "text" in section.keys():
             text = section["text"].lower()
             print(text)
             for x in skillList:
                 print(x.lower())
                 if re.search(r"[^a-z]"+re.escape(x.lower())+r"[^a-z]", text) != None:
-                    print("Found")
-                    print(x)
-                    print("in")
-                    print(text)
                     skillsDict[x] += delta.total_seconds()
                     
 
