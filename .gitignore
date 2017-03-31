@@ -3,4 +3,6 @@
 */.DS_Store
 database.db
 __pycahce__
+__pycahce__/
+__pycahce__/*
 resumes/*.html

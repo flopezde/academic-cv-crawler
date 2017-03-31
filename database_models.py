@@ -1,6 +1,5 @@
 from peewee import *
 from playhouse.sqlite_ext import SqliteExtDatabase
-import datetime
 
 db = SqliteExtDatabase('database.db')
 
@@ -30,9 +29,9 @@ class StudentSkill(Model):
 
     class Meta:
         database = db
-        primary_key = CompositeKey('skill', 'student')
+        primary_key = CompositeKey('skill', 'resume')
 
 
 if __name__ == '__main__':
     db.connect()
-    db.create_tables([Student, Skill, StudentSkill, RawResume])
+    db.create_tables([Student, Skill, RawResume, StudentSkill])

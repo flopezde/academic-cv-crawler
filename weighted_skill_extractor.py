@@ -9,8 +9,8 @@ from os.path import isfile, join
 
 def get_weight(start_date, end_date):
     duration = date_parser(end_date) - date_parser(start_date)
-    dir(duration)
-    return duration
+    print(dir(duration))
+    return max(0.0, min(24 / (duration.days / 30), 1.0))
 
 
 def extract_dates(resume, skill_list):
@@ -35,7 +35,10 @@ def extract_dates(resume, skill_list):
                     except Exception as e:
                         print(e)
                         weight = 0
-                    StudentSkill.create(skill=skill_model, resume=resume, weight=weight)
+                    try:
+                        StudentSkill.create(skill=skill_model, resume=resume, weight=weight)
+                    except IntegrityError as e:
+                        print(e)
 
 
 def run():
