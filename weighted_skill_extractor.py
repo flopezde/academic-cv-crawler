@@ -1,21 +1,24 @@
 import json
 import re
 from database_models import *
-from dateutil.parser import parse
+from dateutil.parser import parse as date_parser
 from datetime import datetime
 from os import listdir, remove, chdir, system
 from os.path import isfile, join
 
 
 def get_weight(start_date, end_date):
-    duration = parse(end_date) - parse(start_date)
+    duration = date_parser(end_date) - date_parser(start_date)
+    dir(duration)
+    return duration
 
-def extract_dates(json_file, skill_list):
-    with open(json_file) as data_file:
-        data = json.load(data_file)
 
-    if "work_experience" in data:
-        for section in data["work_experience"]:
+def extract_dates(resume, skill_list):
+    resume_json = json.loads(resume.resume_json)
+    if "work_experience" in resume_json:
+        for section in resume_json["work_experience"]:
+            start_date = str()
+            end_date = str()
             if "date_start" in section.keys():
                 start_date = section["date_start"]
                 if "date_end" in section.keys():
@@ -24,39 +27,22 @@ def extract_dates(json_file, skill_list):
                 text = section["text"].lower()
                 skills = list()
                 for x in skill_list:
-                    if re.search(r"[^a-z]"+re.escape(x.skill_name.lower())+r"[^a-z]", text) is not None:
+                    if re.search(r"[^A-Za-z0-9]"+re.escape(x.name.lower())+r"[^A-Za-z0-9]", text) is not None:
                         skills.append(x)
                 for skill_model in skills:
-                    weight = get_weight(start_date, end_date)
-                    StudentSkill.create(skill=skill_model,student=)
+                    try:
+                        weight = get_weight(start_date, end_date)
+                    except Exception as e:
+                        print(e)
+                        weight = 0
+                    StudentSkill.create(skill=skill_model, resume=resume, weight=weight)
 
 
-
-
-def get_resume_files(resumes_dir):
-    pdf_files = [f for f in listdir(resumes_dir) if (f[-4:] == '.pdf' and isfile(join(resumes_dir, f)))]
-    return pdf_files
-
-
-def parse_resume(resume, output):
-    chdir('ResumeParser/ResumeTransducer')
-    system('export GATE_HOME="../GATEFiles"')
-    command = ("java -cp 'bin/*:../GATEFiles/lib/*:../GATEFiles/bin/gate.jar:lib/*' "
-               "code4goal.antony.resumeparser.ResumeParserProgram "
-               "../../" + resume + " "
-                                   "../../" + output)
-    system(command)
-    chdir('../..')
-
-
-def run(resumes_dir):
-    pdf_files = get_resume_files(resumes_dir)
-    temp_output_name = 'parsed.json'
-    for resume in pdf_files:
-        parse_resume(resume, temp_output_name)
-        extract_dates(temp_output_name, Skill.select())
-        remove(temp_output_name)
+def run():
+    skills = Skill.select()
+    for resume in RawResume.select():
+        extract_dates(resume, skills)
 
 
 if __name__ == '__main__':
-    run('resumes')
+    run()
