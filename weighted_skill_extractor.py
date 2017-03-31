@@ -3,45 +3,34 @@ import re
 from database_models import *
 from dateutil.parser import parse
 from datetime import datetime
-from os import listdir, remove
+from os import listdir, remove, chdir, system
 from os.path import isfile, join
 
 
-def find_whole_word(word):
-    return re.compile(r'\b({0})\b'.format(word), flags=re.IGNORECASE)
+def get_weight(start_date, end_date):
+    duration = parse(end_date) - parse(start_date)
 
-
-def extract_skills(json_file):
+def extract_dates(json_file, skill_list):
     with open(json_file) as data_file:
         data = json.load(data_file)
 
-    for section in data["skills"]:
-        for key in section:
-            skill_string = section[key]
-            skill_list = [skill_list.strip() for skill_list in re.split(',|:', skill_string)]
-    return skill_list
+    if "work_experience" in data:
+        for section in data["work_experience"]:
+            if "date_start" in section.keys():
+                start_date = section["date_start"]
+                if "date_end" in section.keys():
+                    end_date = section["date_end"]
+            if "text" in section.keys():
+                text = section["text"].lower()
+                skills = list()
+                for x in skill_list:
+                    if re.search(r"[^a-z]"+re.escape(x.skill_name.lower())+r"[^a-z]", text) is not None:
+                        skills.append(x)
+                for skill_model in skills:
+                    weight = get_weight(start_date, end_date)
+                    StudentSkill.create(skill=skill_model,student=)
 
 
-def extract_dates(file, skill_list):
-    with open(file) as data_file:
-        data = json.load(data_file)
-
-    for section in data["work_experience"]:
-        delta = 0
-        if "date_start" in section.keys():
-            startDate = parse(section["date_start"])
-        if "date_end" in section.keys():
-            endDate = parse(section["date_end"])
-        else:
-            endDate = datetime.today()
-        delta = endDate - startDate
-        if "text" in section.keys():
-            text = section["text"].lower()
-            print(text)
-            for x in skill_list:
-                print(x.lower())
-                if re.search(r"[^a-z]"+re.escape(x.lower())+r"[^a-z]", text) != None:
-                    skillsDict[x] += delta.total_seconds()
 
 
 def get_resume_files(resumes_dir):
@@ -49,35 +38,25 @@ def get_resume_files(resumes_dir):
     return pdf_files
 
 
-def save_skill_to_database(skill_name):
-    if len(Skill.select().where(Skill.name == skill_name)) < 1:
-        new_skill = Skill.create(name=skill_name)
-        new_skill.skill_id = new_skill.id
-        new_skill.save()
-
-
 def parse_resume(resume, output):
-    pass
+    chdir('ResumeParser/ResumeTransducer')
+    system('export GATE_HOME="../GATEFiles"')
+    command = ("java -cp 'bin/*:../GATEFiles/lib/*:../GATEFiles/bin/gate.jar:lib/*' "
+               "code4goal.antony.resumeparser.ResumeParserProgram "
+               "../../" + resume + " "
+                                   "../../" + output)
+    system(command)
+    chdir('../..')
 
 
-def main(resumes_dir):
+def run(resumes_dir):
     pdf_files = get_resume_files(resumes_dir)
     temp_output_name = 'parsed.json'
     for resume in pdf_files:
         parse_resume(resume, temp_output_name)
-        skills_list = extract_skills(temp_output_name)
-        for skill_name in skills_list:
-            save_skill_to_database(skill_name.lower())
+        extract_dates(temp_output_name, Skill.select())
         remove(temp_output_name)
 
 
-filename = input("Filename: ")
-skillList = extract_skills(filename)
-skillsDict = dict()
-for x in skillList:
-  skillsDict[x] = 0
-extract_dates(filename, skillList)
-for key in skillsDict:
-    print(key)
-    print(skillsDict[key])
-
+if __name__ == '__main__':
+    run('resumes')

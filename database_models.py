@@ -19,12 +19,19 @@ class Skill(BaseModel):
     name = CharField(null=False)
 
 
-class StudentSkill(BaseModel):
+class StudentSkill(Model):
     skill = ForeignKeyField(Skill, related_name="skills")
     student = ForeignKeyField(Student, related_name="students")
     weight = FloatField(null=False)
 
+    class Meta:
+        database = db
+        primary_key = CompositeKey('skill', 'student')
+
+
+class RawResume(BaseModel):
+    resume_json = TextField()
 
 if __name__ == '__main__':
     db.connect()
-    db.create_tables([Student, Skill, StudentSkill])
+    db.create_tables([Student, Skill, StudentSkill, RawResume])
