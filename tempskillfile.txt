@@ -1,0 +1,195 @@
+1|1|python
+2|2|perl
+3|3|c
+4|4|c++
+5|5|matlab
+6|6|java
+7|7|shell scripting
+8|8|artificial intelligence
+9|9|machine learning
+10|10|algorithm design
+11|11|software development
+12|12|r
+13|13|javascript
+14|14|prolog
+15|15|haskell
+16|16|assembly
+17|17|pascal
+18|18|qbasic
+19|19|html
+20|20|css
+21|21|ajax
+22|22|sql
+23|23|php
+24|24|latex
+25|25|junit
+26|26|unix
+27|27|win32
+28|28|facial animation
+29|29|face and eye tracking
+30|30|image processing
+31|31|apache spark
+32|32|hadoop
+33|33|postgres
+34|34|oracle
+35|35|farsi
+36|36|cuda
+37|37|openmp
+38|38|z3
+39|39|spice
+40|40|lisp
+41|41|racket
+42|7|bash
+43|42|verilog
+44|43|emacs
+45|44|git
+46|45|visual studio
+47|46|eclipse
+48|47|opengl
+49|48|qt
+50|49|github
+51|50|mac os
+52|51|linux
+53|52|ubuntu
+54|53|objective-c
+55|54|mysql
+56|55|svn
+57|56|ruby
+58|57|ruby on rails
+59|57|ruby onrails
+60|19|html5
+61|58|english
+62|59|mandarin
+63|60|x86 assembly
+64|61|sqlite
+65|62|cvs
+66|63|erlang
+67|64|j2ee
+68|65|asp
+69|66|tomcat
+70|67|.net
+71|68|django
+72|69|redhat
+73|70|go
+74|61|sqllite
+75|71|debian
+76|72|mint
+77|73|fedora
+78|74|mathematica
+79|75|vhdl
+80|76|mpi
+81|77|openmp
+82|78|openmpi
+83|79|posix
+84|80|winmips64
+85|81|pspice
+86|82|usloss
+87|83|flask
+88|84|clearcase
+89|85|spim
+90|86|windows
+91|87|scheme
+92|88|arm
+93|89|visual basic
+94|90|solaris
+95|91|office
+96|92|information theory
+97|93|automata theory
+98|94|graph theory
+99|95|calculus
+100|96|linear algebra
+101|97|cryptography
+102|98|reinforcement learning
+103|99|computer vision
+104|100|natural language processing
+105|101|robotics
+106|7|shell
+107|102|opencv
+108|103|scala
+109|104|french
+110|105|vim
+111|106|moodle
+112|107|spanish
+113|108|japanese
+114|33|posgresql
+115|109|spring framework
+116|110|jpa
+117|111|jboss
+118|112|hibernate
+119|113|eclipselink
+120|114|mongodb
+121|115|hsqldb
+122|116|turkish
+123|117|ios
+124|109|spring mvc
+125|118|apache jackrabbit
+126|119|jaxb
+127|120|xml
+128|121|jquery
+129|122|maven
+130|123|adobe fireworks
+131|124|android
+132|125|ant
+133|126|adobe creative suite
+134|127|combinatorics
+135|128|approximation algorithms
+136|129|vc++
+137|130|omnetpp
+138|131|ns2
+139|132|opnet
+140|133|signal processing
+141|134|xhtml
+142|135|vbscript
+143|136|xslt
+144|137|bsd
+145|138|dos
+146|35|persian
+147|139|german
+148|140|cocoa
+149|141|css3
+150|142|xcode
+151|143|excel
+152|144|nginx
+153|145|haproxy
+154|146|amazon aws
+155|147|mapreduce
+156|148|greek
+157|13|js
+158|149|node js
+159|150|tornado
+160|151|cyclone
+161|152|twisted
+162|153|unity3d
+163|154|celery
+164|155|react
+165|156|kafka
+166|157|neo4j
+167|158|redis
+168|159|rocksdb
+169|160|voldemort
+170|161|openwrt
+171|15|haskel
+172|162|make
+173|163|photoshop
+174|164|adobe illustrator
+175|165|adobe dreamweaver
+176|166|openoffice
+177|167|backbone
+178|168|angularjs
+179|169|jdbc
+180|170|heroku
+181|171|mockito
+182|172|jira
+183|173|jenkins
+184|174|aspectj
+185|175|octave
+186|176|cgroups
+187|177|qemu
+188|178|libvirt
+189|179|vagrant
+190|180|gcc
+191|181|intellij idea
+
+
+
+
