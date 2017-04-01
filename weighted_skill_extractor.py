@@ -9,12 +9,14 @@ from os.path import isfile, join
 
 def get_weight(start_date, end_date):
     duration = date_parser(end_date) - date_parser(start_date)
-    print(dir(duration))
-    return max(0.0, min(24 / (duration.days / 30), 1.0))
+    # Maximum weight of 1 for 24 months of experience
+    # Minimum weight of .2 for no date
+    return max(0.2, min(24 / (duration.days / 30), 1.0))
 
 
 def extract_dates(resume, skill_list):
     resume_json = json.loads(resume.resume_json)
+    added_skills = list()
     if "work_experience" in resume_json:
         for section in resume_json["work_experience"]:
             start_date = str()

@@ -13,9 +13,13 @@ class Student(BaseModel):
     name = CharField()
 
 
+class RawSkill(BaseModel):
+    name = CharField(null=False)
+
+
 class Skill(BaseModel):
     skill_id = IntegerField(null=True)
-    name = CharField(null=False)
+    name = CharField(null=False, unique=True)
 
 
 class RawResume(BaseModel):

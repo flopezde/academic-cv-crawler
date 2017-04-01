@@ -25,10 +25,8 @@ def get_resume_files(resumes_dir):
 
 
 def save_skill_to_database(skill_name):
-    if len(Skill.select().where(Skill.name == skill_name)) < 1:
-        new_skill = Skill.create(name=skill_name)
-        new_skill.skill_id = new_skill.id
-        new_skill.save()
+    if len(RawSkill.select().where(RawSkill.name == skill_name)) < 1:
+        RawSkill.create(name=skill_name)
 
 
 def parse_resume(resume, output):
