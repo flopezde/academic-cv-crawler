@@ -46,7 +46,7 @@ def parse_directory(resumes_dir):
     for resume_file in pdf_files:
         parse_resume(resume_file, temp_output_name)
         with open(temp_output_name, 'r') as json_file:
-            RawResume.create(resume_json=json_file.read())
+            RawResume.create(resume_json=json_file.read(), file_name=resume_file)
         remove(temp_output_name)
 
 

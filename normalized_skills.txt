@@ -189,7 +189,3 @@
 189|179|vagrant
 190|180|gcc
 191|181|intellij idea
-
-
-
-
