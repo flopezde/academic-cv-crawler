@@ -11,8 +11,25 @@ def get_weight(start_date, end_date):
     # Maximum weight of 1 for max_months_experience of experience
     # Minimum weight of .2 for no date
     experience_skill = (duration.days / 30) / max_months_experience
-    experience_skill = (experience_skill * .8) + .2
+    experience_skill = max(.2, (experience_skill * .8) + .2)
     return min(experience_skill, 1.0)
+
+
+def parse_work_experience(text, start_date, end_date, database_skill_list, resume):
+    skills = list()
+    for x in database_skill_list:
+        if re.search(r"[^A-Za-z0-9]" + re.escape(x.name.lower()) + r"[^A-Za-z0-9]", text) is not None:
+            skills.append(x)
+    for skill_model in skills:
+        try:
+            weight = get_weight(start_date, end_date)
+        except Exception as e:
+            print(e)
+            weight = .2
+        try:
+            ResumeSkill.create(skill_id=skill_model.skill_id, resume=resume, weight=weight)
+        except IntegrityError as e:
+            print(e)
 
 
 def extract_dates(resume, database_skill_list):
@@ -29,26 +46,16 @@ def extract_dates(resume, database_skill_list):
                     end_date = strftime("%d %b %Y", gmtime())
             if "text" in section.keys():
                 text = section["text"].lower()
-                skills = list()
-                for x in database_skill_list:
-                    if re.search(r"[^A-Za-z0-9]"+re.escape(x.name.lower())+r"[^A-Za-z0-9]", text) is not None:
-                        skills.append(x)
-                for skill_model in skills:
-                    try:
-                        weight = get_weight(start_date, end_date)
-                    except Exception as e:
-                        print(e)
-                        weight = 0
-                    try:
-                        ResumeSkill.create(skill_id=skill_model.skill_id, resume=resume, weight=weight)
-                    except IntegrityError as e:
-                        print(e)
+                parse_work_experience(text, start_date, end_date, database_skill_list, resume)
+            else:
+                for key, text in section.items():
+                    parse_work_experience(text.lower(), "", "", database_skill_list, resume)
 
     if 'skills' in resume_json:
         ex_skills = list()
         for section in resume_json["skills"]:
             for key in section:
-                skill_string = section[key]
+                skill_string = section[key].lower()
                 for x in database_skill_list:
                     if re.search(r"[^A-Za-z0-9]"+re.escape(x.name.lower())+r"[^A-Za-z0-9]", skill_string) is not None:
                         ex_skills.append(x)
