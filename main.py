@@ -9,7 +9,7 @@ if __name__ == '__main__':
     parser_add_job = subparsers.add_parser('add_job', help='add a new job')
     parser_add_job.add_argument('-t', '--title', dest='title', required=True, help='job title')
     parser_add_job.add_argument('-c', '--company', dest='company', required=True, help='name of the company')
-    parser_add_job.add_argument('-s', '--skills', dest='skills', required=True,
+    parser_add_job.add_argument('-s', '--skills', nargs='+', dest='skills', required=True,
                                 help='required skill name, proficiency (out of 10) and importance (out of 10). '
                                      'Should be separated by  space, can include multiple skills')
 
@@ -35,7 +35,7 @@ if __name__ == '__main__':
             raise Exception('skills should be multiply of 3')
         skills = list()
         for i in range(0, len(args.skills) - 2, 3):
-            skills.append((args.skills[i], int(args.skills[i]), int(args.skills[i])))
+            skills.append((args.skills[i], int(args.skills[i+1]), int(args.skills[i+2])))
 
         job = Job.create(title=args.title, company=args.company)
         for skill_tuple in skills:
