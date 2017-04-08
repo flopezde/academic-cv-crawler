@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 from database_models import *
-from raw_skill_extractor import parse_resume
+from resume_parser import parse_resume
 from weighted_skill_extractor import extract_weighted_skills
 from compatibility_score import compute_compatibility_score_for_all
 
@@ -34,8 +34,8 @@ if __name__ == '__main__':
     parser_recommend_job = parser_recommend_type.add_parser('job', help='recommend jobs for a student')
     parser_recommend_job.add_argument('-r', '--resume', dest='resume', required=True, help='file name of resume')
 
-    # args = parser.parse_args("recommend student -t SE -c Google".split(' '))
-    args = parser.parse_args()
+    args = parser.parse_args("compute -c".split(' '))
+    # args = parser.parse_args()
     if args.command == 'add_job':
         if len(args.skills) % 3 != 0:
             raise Exception('skills should be multiply of 3')
@@ -56,7 +56,7 @@ if __name__ == '__main__':
             extract_weighted_skills(resume)
     elif args.command == 'compute':
         if args.clear:
-            CompatibilityScore.delete()
+            CompatibilityScore.delete().execute()
         compute_compatibility_score_for_all()
     elif args.command == 'recommend':
         if args.entity == 'student':
