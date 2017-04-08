@@ -21,8 +21,8 @@ if __name__ == '__main__':
 
     parser_compute = subparsers.add_parser('compute', help='computes compatibility score for every pair of jobs and '
                                                            'students')
-    parser_compute.add_argument('-c', '--clear', dest='clear', help='clear database before computing',
-                                action='store_true')
+    # parser_compute.add_argument('-c', '--clear', dest='clear', help='clear database before computing',
+    #                             action='store_true')
 
     parser_recommend = subparsers.add_parser('recommend', help='display recommendations')
     parser_recommend_type = parser_recommend.add_subparsers(help='type of entity to recommend to', dest='entity')
@@ -55,8 +55,8 @@ if __name__ == '__main__':
         if resume is not None:
             extract_weighted_skills(resume)
     elif args.command == 'compute':
-        if args.clear:
-            CompatibilityScore.delete().execute()
+        # if args.clear:
+        CompatibilityScore.delete().execute()
         compute_compatibility_score_for_all()
     elif args.command == 'recommend':
         if args.entity == 'student':
