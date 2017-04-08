@@ -1,5 +1,8 @@
+#!/usr/bin/env python3
 import argparse
 from database_models import *
+from raw_skill_extractor import parse_resume
+from weighted_skill_extractor import extract_weighted_skills
 from compatibility_score import compute_compatibility_score_for_all
 
 if __name__ == '__main__':
@@ -12,6 +15,9 @@ if __name__ == '__main__':
     parser_add_job.add_argument('-s', '--skills', nargs='+', dest='skills', required=True,
                                 help='required skill name, proficiency (out of 10) and importance (out of 10). '
                                      'Should be separated by  space, can include multiple skills')
+
+    parser_add_resume = subparsers.add_parser('add_resume', help='add a new resume')
+    parser_add_resume.add_argument('-f', '--file', dest='file', required=True, help='resume file')
 
     parser_compute = subparsers.add_parser('compute', help='computes compatibility score for every pair of jobs and '
                                                            'students')
@@ -28,8 +34,8 @@ if __name__ == '__main__':
     parser_recommend_job = parser_recommend_type.add_parser('job', help='recommend jobs for a student')
     parser_recommend_job.add_argument('-r', '--resume', dest='resume', required=True, help='file name of resume')
 
+    # args = parser.parse_args("recommend student -t SE -c Google".split(' '))
     args = parser.parse_args()
-    # print(args)
     if args.command == 'add_job':
         if len(args.skills) % 3 != 0:
             raise Exception('skills should be multiply of 3')
@@ -44,6 +50,10 @@ if __name__ == '__main__':
                 # weight is proficiency and importance
                 weight = (skill_tuple[1] * skill_tuple[2]) / 100
                 JobSkill.create(skill_id=db_skill.id, job=job, weight=weight)
+    elif args.command == 'add_resume':
+        resume = parse_resume(args.file)
+        if resume is not None:
+            extract_weighted_skills(resume)
     elif args.command == 'compute':
         if args.clear:
             CompatibilityScore.delete()

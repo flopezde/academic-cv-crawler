@@ -32,7 +32,8 @@ def parse_work_experience(text, start_date, end_date, database_skill_list, resum
             print(e)
 
 
-def extract_dates(resume, database_skill_list):
+def extract_weighted_skills(resume):
+    database_skill_list = Skill.select()
     resume_json = json.loads(resume.resume_json)
     if "work_experience" in resume_json:
         for section in resume_json["work_experience"]:
@@ -67,9 +68,8 @@ def extract_dates(resume, database_skill_list):
 
 
 def run():
-    skills = Skill.select()
     for resume in RawResume.select():
-        extract_dates(resume, skills)
+        extract_weighted_skills(resume)
 
 
 if __name__ == '__main__':

@@ -15,7 +15,8 @@ def extract_skills(resume_json):
         for section in resume_json["skills"]:
             for key in section:
                 skill_string = section[key]
-                skill_list += [y for y in [x.replace("\n", "").strip() for x in re.split("\s*[^A-Za-z0-9\s+\-\(\)]\s*", skill_string)] if y != '']
+                skill_list += [y for y in [x.replace("\n", "").strip() for x in re.split("\s*[^A-Za-z0-9\s+\-\(\)]\s*",
+                                                                                         skill_string)] if y != '']
         return skill_list
 
 
@@ -29,25 +30,30 @@ def save_skill_to_database(skill_name):
         RawSkill.create(name=skill_name)
 
 
-def parse_resume(resume, output):
+def parse_resume_to_json(relative_resume_path, output):
     chdir('ResumeParser/ResumeTransducer')
     system('export GATE_HOME="../GATEFiles"')
     command = ("java -cp 'bin/*:../GATEFiles/lib/*:../GATEFiles/bin/gate.jar:lib/*' "
                "code4goal.antony.resumeparser.ResumeParserProgram "
-               "../../" + resume + " "
+               "../../" + relative_resume_path + " "
                "../../" + output)
     system(command)
     chdir('../..')
 
 
+def parse_resume(relative_resume_path):
+    temp_output_name = 'parsed.json'
+    parse_resume_to_json(relative_resume_path, temp_output_name)
+    with open(temp_output_name, 'r') as json_file:
+        result = RawResume.create(resume_json=json_file.read(), file_name=relative_resume_path)
+    remove(temp_output_name)
+    return result
+
+
 def parse_directory(resumes_dir):
     pdf_files = get_resume_files(resumes_dir)
-    temp_output_name = 'parsed.json'
     for resume_file in pdf_files:
-        parse_resume(resume_file, temp_output_name)
-        with open(temp_output_name, 'r') as json_file:
-            RawResume.create(resume_json=json_file.read(), file_name=resume_file)
-        remove(temp_output_name)
+        parse_resume(resume_file)
 
 
 if __name__ == '__main__':
