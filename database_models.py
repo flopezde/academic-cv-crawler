@@ -38,7 +38,8 @@ class ResumeSkill(Model):
 
 
 class Job(BaseModel):
-    name = CharField()
+    title = CharField(null=False)
+    company = CharField()
 
 
 class JobSkill(Model):
@@ -52,7 +53,7 @@ class JobSkill(Model):
 
 
 class CompatibilityScore(Model):
-    job = ForeignKeyField(RawResume, related_name="compatibility_jobs")
+    job = ForeignKeyField(Job, related_name="compatibility_jobs")
     resume = ForeignKeyField(RawResume, related_name="compatibility_resumes")
     score = FloatField(null=False)
 
