@@ -28,7 +28,7 @@ if __name__ == '__main__':
     parser_recommend_job = parser_recommend_type.add_parser('job', help='recommend jobs for a student')
     parser_recommend_job.add_argument('-r', '--resume', dest='resume', required=True, help='file name of resume')
 
-    args = parser.parse_args('recommend student -t SE -c Google'.split(' '))
+    args = parser.parse_args()
     # print(args)
     if args.command == 'add_job':
         if len(args.skills) % 3 != 0:
