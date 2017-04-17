@@ -59,13 +59,17 @@ if __name__ == '__main__':
         CompatibilityScore.delete().execute()
         compute_compatibility_score_for_all()
     elif args.command == 'recommend':
+        # Minimum score for matches
+        min_score = .5
+        max_matches = 10
         if args.entity == 'student':
             jobs = Job.select().where(Job.title == args.title, Job.company == args.company)
             if len(jobs) == 0:
                 print("Could not find the job on database")
             for db_job in jobs:
-                c_scores = CompatibilityScore.select().where(CompatibilityScore.job == db_job)\
-                    .order_by(CompatibilityScore.score.desc())
+                c_scores = CompatibilityScore.select().where(CompatibilityScore.job == db_job, CompatibilityScore.score
+                                                             >= min_score)\
+                    .order_by(CompatibilityScore.score.desc()).limit(max_matches)
                 if len(c_scores) == 0:
                     print("Could not find any matches. Please run compute first")
                 for score in c_scores:
@@ -75,8 +79,9 @@ if __name__ == '__main__':
             if len(resumes) == 0:
                 print("Could not find the resume on database")
             for db_resume in resumes:
-                c_scores = CompatibilityScore.select().where(CompatibilityScore.resume == db_resume)\
-                    .order_by(CompatibilityScore.score.desc())
+                c_scores = CompatibilityScore.select().where(CompatibilityScore.resume == db_resume,
+                                                             CompatibilityScore.score >= min_score)\
+                    .order_by(CompatibilityScore.score.desc()).limit(max_matches)
                 if len(c_scores) == 0:
                     print("Could not find any matches. Please run compute first")
                 for score in c_scores:

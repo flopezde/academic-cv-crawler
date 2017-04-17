@@ -31,6 +31,7 @@ def compute_compatibility_score_for_all():
             for skill_id in resume_skills:
                 if skill_id in job_skills:
                     compatibility_score += resume_skills[skill_id] * job_skills[skill_id]
+            compatibility_score /= len(all_job_skills[job_id])
             CompatibilityScore.create(job=job_id, resume=resume_id, score=compatibility_score)
 
 
