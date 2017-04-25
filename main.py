@@ -60,7 +60,7 @@ if __name__ == '__main__':
         compute_compatibility_score_for_all()
     elif args.command == 'recommend':
         # Minimum score for matches
-        min_score = .5
+        min_score = .1
         max_matches = 10
         if args.entity == 'student':
             jobs = Job.select().where(Job.title == args.title, Job.company == args.company)
