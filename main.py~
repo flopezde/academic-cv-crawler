@@ -89,7 +89,7 @@ if __name__ == '__main__':
                 for score in c_scores:
                     print('Score: {:0.2f}, Job: {} at {}'.format(score.score, score.job.title, score.job.company))
     elif args.command == 'balance':
-        with open('rankedJobsList.txt', 'r') as infile:
+        with open('rankedJobstList.txt', 'r') as infile:
            data = infile.read()
         my_list = data.splitlines()
         for line in my_list:

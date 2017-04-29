@@ -56,7 +56,6 @@ class CompatibilityScore(Model):
     job = ForeignKeyField(Job, related_name="compatibility_jobs")
     resume = ForeignKeyField(RawResume, related_name="compatibility_resumes")
     score = FloatField(null=False)
-    count = IntegerField(default=0)
 
     class Meta:
         database = db
